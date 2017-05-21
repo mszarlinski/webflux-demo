@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 
 import static com.github.mszarlinski.webflux.util.Sleeper.sleep;
 
@@ -16,16 +17,23 @@ class AsyncMovieController {
 
     private final FakeMovieRepository movieRepository;
 
-    AsyncMovieController(FakeMovieRepository movieRepository) {
+    private final ExecutorService executorService;
+
+    AsyncMovieController(FakeMovieRepository movieRepository, final ExecutorService executorService) {
         this.movieRepository = movieRepository;
+        this.executorService = executorService;
     }
 
+    /**
+     * Returning deferred result:
+     * https://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#mvc-ann-return-types
+     */
     @GetMapping
-    CompletableFuture<List<Movie>> getMovies() { // or DeferredResult - what is the difference?
+    CompletableFuture<List<Movie>> getMovies() {
         return CompletableFuture.supplyAsync(() -> {
             sleep(Duration.ofSeconds(1));
             return movieRepository.findAll();
-        });
+        }, executorService);
     }
 
     @GetMapping("/{movieId}")
@@ -33,7 +41,7 @@ class AsyncMovieController {
         return CompletableFuture.supplyAsync(() -> {
             sleep(Duration.ofSeconds(1));
             return movieRepository.findById(movieId);
-        });
+        },executorService);
     }
 
     @PostMapping
