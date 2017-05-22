@@ -11,14 +11,14 @@ import static java.util.Arrays.asList;
 public class FakeMovieRepository {
 
     public Movie findById(final String id) {
-        return new Movie();
+        return new Movie("1", "movie");
     }
 
     public Movie save(final Movie movie) {
-        return new Movie();
+        return new Movie("1", "movie");
     }
 
     public List<Movie> findAll() {
-        return asList(new Movie());
+        return asList(new Movie("1", "movie1"), new Movie("2", "movie2"));
     }
 }

@@ -1,14 +1,16 @@
 package com.github.mszarlinski.webflux.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.NoArgsConstructor;
 
 @Data
-@Document
+@NoArgsConstructor
+@AllArgsConstructor
+//@Document
 public class Movie {
 
-    @Id
+//    @Id
     private String id;
 
     private String name;

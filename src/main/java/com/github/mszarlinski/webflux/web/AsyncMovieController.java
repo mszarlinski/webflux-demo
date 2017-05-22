@@ -2,7 +2,13 @@ package com.github.mszarlinski.webflux.web;
 
 import com.github.mszarlinski.webflux.adapter.mongo.FakeMovieRepository;
 import com.github.mszarlinski.webflux.domain.Movie;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
 import java.util.List;
@@ -41,9 +47,10 @@ class AsyncMovieController {
         return CompletableFuture.supplyAsync(() -> {
             sleep(Duration.ofSeconds(1));
             return movieRepository.findById(movieId);
-        },executorService);
+        }, executorService);
     }
 
+    @ResponseBody
     @PostMapping
     Movie saveMovie(@RequestBody Movie movie) {
         return movieRepository.save(movie);
