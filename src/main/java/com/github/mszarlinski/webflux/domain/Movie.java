@@ -1,17 +1,21 @@
 package com.github.mszarlinski.webflux.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-//@Document
+@Document(collection = "orderOffer")
 public class Movie {
 
-//    @Id
+    @Id
     private String id;
 
+    @Field("orderId")
     private String name;
+
+    public Movie(String name) {
+        this.name = name;
+    }
 }
