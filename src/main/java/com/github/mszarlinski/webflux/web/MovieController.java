@@ -1,34 +1,33 @@
 package com.github.mszarlinski.webflux.web;
 
 import com.github.mszarlinski.webflux.domain.Movie;
-import com.github.mszarlinski.webflux.domain.ReactiveMovieRepository;
+import com.github.mszarlinski.webflux.domain.MovieRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/movies")
 class MovieController {
 
-    private final ReactiveMovieRepository movieRepository;
+    private final MovieRepository movieRepository;
 
-    MovieController(ReactiveMovieRepository movieRepository) {
+    MovieController(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
     }
 
     @GetMapping
-    Flux<Movie> get1000Movies() {
-        return movieRepository.findAll()
-                .take(1000);
+    Page<Movie> get1000Movies() {
+        return movieRepository.findAll(PageRequest.of(1, 1000));
     }
 
     @PostMapping
-    Mono<Void> saveMovies(Flux<String> names) {
-        return names.map(Movie::new)
-                .map(movieRepository::save)
-                .then();
+    void saveMovies(List<String> names) {
+        names.forEach(name -> movieRepository.save(new Movie(name)));
     }
 }
